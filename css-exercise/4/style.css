@@ -1,0 +1,119 @@
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 50px;
+}
+
+h1 {
+  font-size: 72px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 50px;
+  letter-spacing: 10px;
+  text-shadow: 3px 3px 3px rgba(255, 255, 255, 0.2);
+}
+
+.column {
+  flex: 1 0 20%;
+  margin: 20px;
+  padding: 50px;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #333;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  transform: rotate(calc(var(--random) * 10deg));
+  transition: all 0.3s ease-in-out;
+}
+
+.column:hover {
+  transform: rotate(calc(var(--random) * 10deg)) translateY(-20px);
+  box-shadow: 0 20px 20px rgba(255, 255, 255, 0.2);
+}
+
+.column h2 {
+  font-size: 36px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  letter-spacing: 5px;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  margin: 20px 0;
+}
+
+a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease-in-out;
+}
+
+a:hover {
+  color: #f00;
+}
+
+/* Random Rotation for Columns */
+.column:nth-child(1) {
+  --random: 0.1;
+}
+
+.column:nth-child(2) {
+  --random: 0.2;
+}
+
+.column:nth-child(3) {
+  --random: 0.3;
+}
+
+.column:nth-child(4) {
+  --random: 0.4;
+}
+
+.column:nth-child(5) {
+  --random: 0.5;
+}
+
+.column:nth-child(6) {
+  --random: 0.6;
+}
+
+.column:nth-child(7) {
+  --random: 0.7;
+}
+
+.column:nth-child(8) {
+  --random: 0.8;
+}
+
+.column:nth-child(9) {
+  --random: 0.9;
+}
+
+@media screen and (max-width: 768px) {
+  .column {
+    flex: 1 0 40%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .column {
+    flex: 1 0 100%;
+  }
+}
