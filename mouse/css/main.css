@@ -35,6 +35,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	overflow-x: hidden;
 }
 ol, ul {
 	list-style: none;
@@ -786,13 +787,13 @@ nav.next-prev {
 																									#bg2-73 {
 																										position: absolute;
 																										top: 2000px;
-																										left: 900px;
+																										left: 400px;
 																							
 																										}	
 																										#bg2-74 {
 																											position: absolute;
 																											top: 2000px;
-																											left: 900px;
+																											left: 500px;
 																									
 																											}		
 																											#bg2-75 {
@@ -1191,4 +1192,17 @@ nav.next-prev {
 			writing-mode: vertical-rl; /* 设置文本为竖排文字 */
 
 			transform: rotate(180deg); /* 旋转180度 */
+		  }
+
+		  .rotate-y {
+			animation: rotate-y 5s linear infinite;
+		  }
+		  
+		  @keyframes rotate-y {
+			from {
+			  transform: rotateY(0deg);
+			}
+			to {
+			  transform: rotateY(360deg);
+			}
 		  }
