@@ -1,0 +1,23 @@
+
+
+</html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>远程按钮控制</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.min.js"></script>
+</head>
+<body>
+  <button id="remoteButton">点击远程右键</button>
+
+  <script>
+
+const socket = io('http://127.0.0.1:5500');
+    // 当按钮被点击时，发送点击右键的指令
+    document.getElementById('remoteButton').addEventListener('click', function() {
+      socket.emit('clickRightButton');
+      console.log('发送点击右键指令');
+    });
+  </script>
+</body>
+</html>

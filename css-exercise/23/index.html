@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Website 5</title>
+  <style>
+    body {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      grid-gap: 20px;
+      background-color: #fff;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+  
+    .category {
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="category" style="grid-column: 1 / 2; grid-row: 1 / 2;">
+    <!-- 黑色分类内容 -->
+  </div>
+  <div class="category" style="grid-column: 2 / 3; grid-row: 1 / 2;">
+    <!-- 其他分类内容 -->
+  </div>
+  <div class="category" style="grid-column: 1 / 2; grid-row: 2 / 3;">
+    <!-- 实验分类内容 -->
+  </div>
+  <div class="category" style="grid-column: 2 / 3; grid-row: 2 / 3;">
+    <!-- 作品集分类内容 -->
+  </div>
+</body>
+</html>

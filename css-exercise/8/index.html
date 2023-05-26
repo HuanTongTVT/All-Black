@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Splash Text Effect</title>
+    <style>
+      .text {
+        font-size: 72px;
+        text-align: center;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-fill-color: transparent;
+        background-image: radial-gradient(circle, #f00, #00f);
+      }
+
+      .text-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #111;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="text-container">
+      <h1 class="text">Hello World</h1>
+    </div>
+
+    <script>
+      const text = document.querySelector(".text");
+      const textContainer = document.querySelector(".text-container");
+
+      textContainer.addEventListener("mousemove", function (e) {
+        const x = e.pageX - textContainer.offsetLeft;
+        const y = e.pageY - textContainer.offsetTop;
+
+        text.style.textShadow = `
+          ${x}px ${y}px 0 #f00,
+          ${x * -1}px ${y}px 0 #00f,
+          ${y}px ${x}px 0 #0f0,
+          ${y * -1}px ${x}px 0 #0ff
+        `;
+      });
+
+      textContainer.addEventListener("mouseout", function () {
+        text.style.textShadow = "none";
+      });
+    </script>
+  </body>
+</html>

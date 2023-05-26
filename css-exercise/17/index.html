@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Video to ASCII Art</title>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg/dist/ffmpeg.min.js"></script>
+  </head>
+  <body>
+    <button onclick="handleFileSelect()">转换为字符视频</button>
+    <pre id="ascii-art"></pre>
+
+    <script>
+      // 字符集
+      const asciiChars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.'];
+
+      // 处理视频文件
+      async function handleFileSelect() {
+        const videoPath = 'video.mp4'; // 视频文件的路径
+
+        const { createFFmpeg } = FFmpeg;
+        const ffmpeg = createFFmpeg({ log: true });
+        await ffmpeg.load();
+
+        // 读取视频文件
+        const response = await fetch(videoPath);
+        const videoData = await response.arrayBuffer();
+        ffmpeg.FS('writeFile', videoPath, new Uint8Array(videoData));
+
+        // 转换为字符视频
+        await ffmpeg.run('-i', videoPath, '-vf', 'fps=30,scale=160:-1', '-c:v', 'rawvideo', '-f', 'image2pipe', '-');
+
+        // 获取输出的字符画
+        const { data } = await ffmpeg.read('stdout');
+
+        // 处理字符画数据
+        let asciiArt = '';
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const brightness = (r + g + b) / 3;
+          const charIndex = Math.floor((brightness / 255) * (asciiChars.length - 1));
+          asciiArt += asciiChars[charIndex];
+          if ((i + 4) % (160 * 4) === 0) {
+            asciiArt += '\n';
+          }
+        }
+
+        // 显示字符画
+        const asciiArtElement = document.getElementById('ascii-art');
+        asciiArtElement.textContent = asciiArt;
+
+        // 清理
+        ffmpeg.FS('unlink', videoPath);
+        ffmpeg.exit();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image to ASCII Art</title>
+    <style>
+      body{
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow-y: hidden;
+        letter-spacing: 0;
+        z-index: 1;
+      }
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background-color: black;
+        overflow-y: hidden;
+        letter-spacing: 0;
+        z-index: -2;
+      }
+      #text {
+        overflow-y: hidden;
+      }
+      #ascii-art {
+        position: fixed;
+        overflow-y: hidden;
+        bottom: 0;
+        right: 0;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 1px;
+        line-height: 8px;
+        color: white;
+        overflow: auto;
+        white-space: pre;
+        letter-spacing: 1px;
+        z-index: -1;
+      }
+      pre {
+        overflow-y: hidden;
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 4px;
+        line-height: 8px;
+        letter-spacing: 1px; /* 设置字符间距为 0 */
+      }
+    </style>
+  </head>
+  <body>
+
+    <input type="file" id="file-input" accept="image/*">
+    <pre id="ascii-art"></pre>
+
+    <script>
+
+      // 选择文件并处理图片
+      function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = new Image();
+          img.onload = function () {
+            const scaledImg = scaleImage(img, 1024);
+            scaledImg.onload = function () {
+              const asciiArt = convertToASCII(scaledImg);
+              displayASCII(asciiArt);
+            };
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // 缩放图像
+      function scaleImage(img, targetHeight) {
+        const scaleFactor = targetHeight / img.height;
+        const targetWidth = Math.round(img.width * scaleFactor);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = targetWidth;
+        canvas.height = targetHeight;
+
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+        const scaledImg = new Image();
+        scaledImg.src = canvas.toDataURL('image/jpeg');
+
+        return scaledImg;
+      }
+      
+// 图片转换为 ASCII 字符画
+function convertToASCII(img) {
+  const asciiChars = [
+  ' ', '.', ':', '+', '*', '?', '%', '#', '@', 'A',
+];
+
+
+  const asciiChar = '█'; // 使用全角字符作为像素块
+  const blockSize = 9; // 像素块大小为 16x16
+
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  const context = canvas.getContext('2d');
+  context.drawImage(img, 0, 0);
+
+  let asciiArt = '';
+  const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
+  for (let y = 0; y < canvas.height; y += blockSize) {
+    for (let x = 0; x < canvas.width; x += blockSize) {
+      let totalBrightness = 0;
+      let pixelCount = 0;
+      for (let blockY = y; blockY < y + blockSize; blockY++) {
+        for (let blockX = x; blockX < x + blockSize; blockX++) {
+          const index = (blockY * canvas.width + blockX) * 4;
+          const r = imageData[index];
+          const g = imageData[index + 1];
+          const b = imageData[index + 2];
+          const brightness = (r + g + b) / 3;
+          totalBrightness += brightness;
+          pixelCount++;
+        }
+      }
+      const averageBrightness = totalBrightness / pixelCount;
+      const charIndex = Math.floor((averageBrightness / 255) * (asciiChars.length - 1));
+      const char = (typeof asciiChars[charIndex] !== 'undefined') ? asciiChars[charIndex] : ' ';
+      asciiArt += char;
+      if (x + blockSize < canvas.width) {
+        asciiArt += ''; // 添加像素块之间的空格
+      }
+    }
+    if (y + blockSize < canvas.height) {
+      asciiArt += '\n'; // 添加行之间的换行符
+    }
+  }
+
+  return asciiArt;
+}
+
+
+
+      // 根据亮度值返回对应的字符
+      function getCharForBrightness(brightness) {
+        const asciiChars = [' ', '.', ':', '+', '*', '?', '%', '#', '@'];
+        const charIndex = Math.floor((brightness / 255) * (asciiChars.length - 1));
+        return asciiChars[charIndex];
+      }
+
+      // 显示 ASCII 字符画
+      function displayASCII(asciiArt) {
+        const asciiElement = document.getElementById('ascii-art');
+        asciiElement.textContent = asciiArt;
+      }
+
+      // 监听文件选择事件
+      document.getElementById('file-input').addEventListener('change', handleFileSelect);
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image to ASCII Art</title>
+    <style>
+      body,
+      pre {
+        margin: 0;
+        padding: 0;
+      }
+      pre {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 8px;
+        line-height: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="file" id="file-input" accept="image/*">
+    <pre id="ascii-art"></pre>
+
+    <script>
+              const width = document.getElementById("canvas").width = screen.availWidth;
+        const height = document.getElementById("canvas").height = screen.availHeight;
+      // 选择文件并处理图片
+      function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const img = new Image();
+          img.onload = function () {
+            const asciiArt = convertToASCII(img);
+            displayASCII(asciiArt);
+            adjustSize();
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      // 图片转换为 ASCII 字符画
+      function convertToASCII(img) {
+        const asciiChars = ['@', '#', 'S', '%', '?', '*', '+', ';', ':', ',', '.'];
+
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+
+        let asciiArt = '';
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height).data;
+        for (let i = 0; i < imageData.length; i += 4) {
+          const r = imageData[i];
+          const g = imageData[i + 1];
+          const b = imageData[i + 2];
+          const brightness = (r + g + b) / 3;
+          const charIndex = Math.floor((brightness / 255) * (asciiChars.length - 1));
+          asciiArt += asciiChars[charIndex];
+          if ((i + 4) % (canvas.width * 4) === 0) {
+            asciiArt += '\n';
+          }
+        }
+
+        return asciiArt;
+      }
+
+      // 显示 ASCII 字符画
+      function displayASCII(asciiArt) {
+        const asciiElement = document.getElementById('ascii-art');
+        asciiElement.textContent = asciiArt;
+      }
+
+      // 调整页面大小
+      function adjustSize() {
+        const asciiElement = document.getElementById('ascii-art');
+        const screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        const screenHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        asciiElement.style.width = `${screenWidth}px`;
+        asciiElement.style.height = `${screenHeight}px`;
+      }
+
+      // 监听文件选择事件
+      document.getElementById('file-input').addEventListener('change', handleFileSelect);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>方块网格</title>
+ <style>
+  .container {
+   display: grid;
+   grid-template-columns: repeat(3, 100px);
+   grid-template-rows: repeat(3, 100px);
+   grid-gap: 10px;
+  }
+  .box {
+   background-color: #ddd;
+   border: 1px solid #999;
+   text-align: center;
+   font-size: 24px;
+   font-weight: bold;
+   color: #333;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+  }
+  .box:nth-child(odd) {
+   background-color: #999;
+   color: #fff;
+  }
+ </style>
+</head>
+<body>
+ <div class="container">
+  <div class="box">1</div>
+  <div class="box">2</div>
+  <div class="box">3</div>
+  <div class="box">4</div>
+  <div class="box">5</div>
+  <div class="box">6</div>
+  <div class="box">7</div>
+  <div class="box">8</div>
+  <div class="box">9</div>
+ </div>
+</body>
+</html>
